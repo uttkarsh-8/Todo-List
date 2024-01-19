@@ -28,14 +28,14 @@ public class TodoControllerjpa {
     // list-todos
     @GetMapping("list-todos")
     public String listAllTodos(ModelMap modelMap) {
-        String username = getLoggedinUsername(modelMap);
+        String username = getLoggedinUsername();
         List<Todo> todos = todoRepository.findByUsername(username);
         modelMap.addAttribute("todos", todos);
 
         return "listTodos";
     }
 
-    private String getLoggedinUsername(ModelMap modelMap) {
+    private String getLoggedinUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
     }
@@ -43,7 +43,7 @@ public class TodoControllerjpa {
     @GetMapping("add-todo")
     public String showNewTodoPage(ModelMap modelMap) {
         String username = (String) modelMap.get("name");
-        Todo todo = new Todo(0, username, "Default Description", LocalDate.now().plusMonths(2), false);
+        Todo todo = new Todo(0, username, "", LocalDate.now().plusMonths(2), false);
         modelMap.put("todo", todo);
         return "todo";
     }
@@ -53,7 +53,7 @@ public class TodoControllerjpa {
         if (bindingResult.hasErrors()) {
             return "todo";
         } else {
-            String username = getLoggedinUsername(modelMap);
+            String username = getLoggedinUsername();
             todo.setUsername(username);
             todoRepository.save(todo);
 
@@ -82,7 +82,7 @@ public class TodoControllerjpa {
         if (bindingResult.hasErrors()) {
             return "todo";
         } else {
-            String username = getLoggedinUsername(modelMap);
+            String username = getLoggedinUsername();
             todo.setUsername(username);
             todoRepository.save(todo);
 
